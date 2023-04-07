@@ -13,8 +13,6 @@ from mkdocs.utils import warning_filter
 log = logging.getLogger(__name__)
 log.addFilter(warning_filter)
 
-_SKIP_NAMESPACE = ("errors",)  # todo вынести в настройки
-
 
 class HtmlExtraDataPlugin(BasePlugin):
     """Данный плагин парсит данные в папке и добавляет в контекст приложения,
@@ -30,27 +28,27 @@ class HtmlExtraDataPlugin(BasePlugin):
     def on_pre_build(self, config):
         """Обработка данных и заполняем конфиг"""
 
-        data_source_folders = self.config.data.get("data", [])
+        source_folders = self.config.data.get("data", [])
         base_path = os.path.dirname(self.config.config_file_path)
-        if isinstance(data_source_folders, str):
-            data_source_folders = [
-                f"{base_path}/{dir_}" for dir_ in data_source_folders.split(",")
+        if isinstance(source_folders, str):
+            source_folders = [
+                f"{base_path}/{dir_}" for dir_ in source_folders.split(",")
             ]
 
-        if not data_source_folders:
-            data_source_folders = []
+        if not source_folders:
+            source_folders = []
             for datadir in [
                 os.path.dirname(self.config.config_file_path),
                 self.config.docs_dir,
             ]:
                 ds_folder = os.path.join(datadir, "_extradata")
                 if os.path.exists(ds_folder):
-                    data_source_folders.append(ds_folder)
+                    source_folders.append(ds_folder)
 
-        if not data_source_folders:
+        if not source_folders:
             return
 
-        for ds_folder in data_source_folders:
+        for ds_folder in source_folders:
             if os.path.exists(ds_folder):
                 path = Path(ds_folder)
                 for filename in chain(
@@ -75,9 +73,7 @@ class HtmlExtraDataPlugin(BasePlugin):
         """Контекст для страницы"""
 
         namespace = page.url.rstrip("/").split("/").pop()
-
-        if namespace not in _SKIP_NAMESPACE:
-            if namespace in config:
-                context["extradata"] = config[namespace]
+        if namespace in config:
+            context["extradata"] = config[namespace]
 
         return context
