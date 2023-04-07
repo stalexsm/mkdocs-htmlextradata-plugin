@@ -1,9 +1,0 @@
-{
-    "venvPath": ".",
-    "venv": ".venv",
-    "pythonVersion": "3.11",
-    "pythonPlatform": "Darwin",
-    "exclude": [
-        "**/__pycache__"
-    ]
-}
