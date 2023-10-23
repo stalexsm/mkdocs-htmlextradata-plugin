@@ -38,4 +38,6 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+.ruff_cache
+
 pyrightconfig.json

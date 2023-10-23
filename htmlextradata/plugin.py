@@ -1,17 +1,14 @@
 import json
 import logging
 import os
-import sys
 from itertools import chain
 from pathlib import Path
 
 import yaml
 from mkdocs.config import config_options as co
 from mkdocs.plugins import BasePlugin
-from mkdocs.utils import warning_filter
 
 log = logging.getLogger(__name__)
-log.addFilter(warning_filter)
 
 
 class HtmlExtraDataPlugin(BasePlugin):
@@ -74,6 +71,6 @@ class HtmlExtraDataPlugin(BasePlugin):
 
         namespace = page.url.rstrip("/").split("/").pop()
         if namespace in config:
-            context["extradata"] = config[namespace]
+            context["extradata"] = config[namespace]  # type: ignore
 
         return context
